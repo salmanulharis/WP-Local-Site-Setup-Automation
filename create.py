@@ -21,6 +21,9 @@ while True:
 		exit()
 	else:
 		break
+
+need_backup = input("Did you need to create backup(y/n)?: ")
+
 # create wordpress folder
 check_folder = CheckWPFolder()
 check_folder.check_folder(site_name)
@@ -34,9 +37,13 @@ driver.maximize_window()
 create_db = CreateWpDb(driver)
 create_db.create_db(site_name)
 
-# setup wordpress site
+# setup wordpress site and backup
 setup_wp = SetUpWP(driver)
 setup_wp.setup_wp(site_name)
+if need_backup == 'y':
+	setup_wp.delete_all_plugin(site_name)
+	setup_wp.add_updraft(site_name)
+	setup_wp.create_backup(site_name)
 
 # wait and quit
 time.sleep(4)
